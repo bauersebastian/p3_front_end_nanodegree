@@ -1,3 +1,5 @@
+"use strict";
+
 // Enemies our player must avoid
 var Enemy = function(x,y, speed) {
 
@@ -28,19 +30,13 @@ Enemy.prototype.update = function(dt) {
         this.x = 0;
     }
     //Reset the player once it collided with the enemy
-    //object1.x < object2.x + object2.width  && object1.x + object1.width  > object2.x &&
-		//object1.y < object2.y + object2.height && object1.y + object1.height > object2.y
     else {
         if (this.y === player.y) {
-            if (this.x === player.x {
+            if (this.x < player.x + 20 && this.x + 20 > player.x) {
                 player.reset();
             }
         }
     }
-
-
-
-
 
 };
 
@@ -54,12 +50,16 @@ Enemy.prototype.render = function() {
 // a handleInput() method.
 
 var Player = function(x,y) {
+    //Current x position of the player
     this.x = x;
+    //Current y position of the player
     this.y = y;
+    //Image of the player
     this.sprite = 'images/char-boy.png';
 };
 
-Player.prototype.update = function(dt) {
+//Reset the player once it reached the water
+Player.prototype.update = function() {
     if (this.y === -25) {
         this.reset();
     }
@@ -69,11 +69,13 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+//Put the player back to the start position
 Player.prototype.reset = function() {
     this.y = 375;
     this.x = 200;
 };
 
+//React to the pressed buttons of the user of the game
 Player.prototype.handleInput = function(key) {
     switch (key) {
         case 'left':
@@ -113,17 +115,17 @@ Player.prototype.handleInput = function(key) {
     }
 };
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+// Now we instantiate the objects
+// All enemies are placed in the array of allEnemies
+// The player object is placed into player
 
 var allEnemies = [];
 
-var enemy1 = new Enemy(-100,55,20);
-var enemy2 = new Enemy(0,135,40);
-var enemy3 = new Enemy(-5,215,20);
-var enemy4 = new Enemy(-100,55.40);
-var enemy5 = new Enemy(-50,135,20);
+var enemy1 = new Enemy(-100,55,80);
+var enemy2 = new Enemy(0,135,100);
+var enemy3 = new Enemy(-5,215,300);
+var enemy4 = new Enemy(-100,55,230);
+var enemy5 = new Enemy(-20,135,160);
 allEnemies.push(enemy1, enemy2, enemy3, enemy4, enemy5);
 var player = new Player(200,375);
 
