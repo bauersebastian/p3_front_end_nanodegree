@@ -13,7 +13,7 @@ var Enemy = function(x,y, speed) {
     //Used image for the enemy
     this.sprite = 'images/enemy-bug.png';
     //The speed of the enemy
-    this.speed = speed
+    this.speed = speed;
 };
 
 // Update the enemy's position, required method for game
@@ -23,15 +23,15 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
 
-    //Define the speed
+    // Define the speed
     this.x = this.x + (this.speed * dt);
-    //Make sure the enemy is reset once it left the screen
+    // Make sure the enemy is reset once it left the screen
     if (this.x > 505) {
         this.x = 0;
     }
-    //Reset the player once it collided with the enemy
+    // Reset the player once it collided with the enemy
     else {
-        if (this.y === player.y) {
+        if (this.y < player.y + 15 && this.y + 15 > player.y) {
             if (this.x < player.x + 20 && this.x + 20 > player.x) {
                 player.reset();
             }
@@ -50,17 +50,17 @@ Enemy.prototype.render = function() {
 // a handleInput() method.
 
 var Player = function(x,y) {
-    //Current x position of the player
+    // Current x position of the player
     this.x = x;
-    //Current y position of the player
+    // Current y position of the player
     this.y = y;
-    //Image of the player
+    // Image of the player
     this.sprite = 'images/char-boy.png';
 };
 
-//Reset the player once it reached the water
+// Reset the player once it reached the water
 Player.prototype.update = function() {
-    if (this.y === -25) {
+    if (this.y === -40) {
         this.reset();
     }
 };
@@ -69,18 +69,23 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-//Put the player back to the start position
+// Put the player back to the start position
 Player.prototype.reset = function() {
     this.y = 375;
     this.x = 200;
 };
 
-//React to the pressed buttons of the user of the game
+// Constant values for tile height and width
+
+var TILE_WIDTH = 101,
+    TILE_HEIGHT = 83;
+
+// React to the pressed buttons of the user of the game
 Player.prototype.handleInput = function(key) {
     switch (key) {
         case 'left':
-            if (this.x >= 100) {
-                this.x = this.x - 100;
+            if (this.x >= TILE_WIDTH) {
+                this.x = this.x - TILE_WIDTH;
                 break;
             }
             else {
@@ -89,7 +94,7 @@ Player.prototype.handleInput = function(key) {
 
         case 'right':
             if (this.x < 400) {
-                this.x = this.x + 100;
+                this.x = this.x + TILE_WIDTH;
                 break;
             }
             else {
@@ -98,7 +103,7 @@ Player.prototype.handleInput = function(key) {
 
         case 'up':
             if (this.y > 0) {
-                this.y = this.y - 80;
+                this.y = this.y - TILE_HEIGHT;
                 break;
             }
             else {
@@ -106,7 +111,7 @@ Player.prototype.handleInput = function(key) {
             }
         case 'down':
             if (this.y < 375) {
-                this.y = this.y + 80;
+                this.y = this.y + TILE_HEIGHT;
                 break;
             }
             else {
