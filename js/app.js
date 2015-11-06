@@ -1,20 +1,34 @@
 "use strict";
 
+
+// Superclass for the characters of the game
+var Character = function(x,y) {
+    // Current x position of the character
+    this.x = x;
+    // Current y position of the character
+    this.y = y;
+};
+
+// Draw the character on the screen, required method for game
+Character.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
 // Enemies our player must avoid
 var Enemy = function(x,y, speed) {
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
+    Character.call(this, x, y);
 
-    //Current x position of the enemy
-    this.x = x;
-    //Current y position of the enemy
-    this.y = y;
     //Used image for the enemy
     this.sprite = 'images/enemy-bug.png';
     //The speed of the enemy
     this.speed = speed;
 };
+
+Enemy.prototype = Object.create(Character.prototype);
+Enemy.prototype.constructor = Enemy;
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -40,33 +54,24 @@ Enemy.prototype.update = function(dt) {
 
 };
 
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
 
 var Player = function(x,y) {
-    // Current x position of the player
-    this.x = x;
-    // Current y position of the player
-    this.y = y;
+    Character.call(this, x, y);
     // Image of the player
     this.sprite = 'images/char-boy.png';
 };
+
+Player.prototype = Object.create(Character.prototype);
+Player.prototype.constructor = Player;
 
 // Reset the player once it reached the water
 Player.prototype.update = function() {
     if (this.y === -40) {
         this.reset();
     }
-};
-
-Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 // Put the player back to the start position
@@ -84,39 +89,29 @@ var TILE_WIDTH = 101,
 Player.prototype.handleInput = function(key) {
     switch (key) {
         case 'left':
-            if (this.x >= TILE_WIDTH) {
-                this.x = this.x - TILE_WIDTH;
-                break;
+            if (this.x >= 99) {
+                this.x -= TILE_WIDTH;
             }
-            else {
-                break;
-            }
+            break;
 
         case 'right':
             if (this.x < 400) {
-                this.x = this.x + TILE_WIDTH;
-                break;
+                this.x += TILE_WIDTH;
             }
-            else {
-                break;
-            }
+            break;
 
         case 'up':
             if (this.y > 0) {
-                this.y = this.y - TILE_HEIGHT;
-                break;
+                this.y -= TILE_HEIGHT;
             }
-            else {
-                break;
-            }
+            break;
+
         case 'down':
             if (this.y < 375) {
-                this.y = this.y + TILE_HEIGHT;
+                this.y += TILE_HEIGHT;
                 break;
             }
-            else {
-                break;
-            }
+            break;
     }
 };
 
